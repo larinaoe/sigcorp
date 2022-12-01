@@ -40,27 +40,14 @@ class JobVacancyController extends Controller
 
     public function ongoingJobVacancy(JobVacancy $jobVacancy)
     {
-        if ($jobVacancy) {
-            $jobVacancy->status = true;
-            $jobVacancy->save();
-        }
+        $jobVacancy->status = true;
+        $jobVacancy->save();
     }
 
     public function pausedJobVacancy(JobVacancy $jobVacancy)
     {
-      if ($jobVacancy) {
         $jobVacancy->status = false;
         $jobVacancy->save();
-      }
-    }
-
-    public function searchVacancies(JobVacancyRequest $request)
-    {
-        $filter = JobVacancy::where('type', 'LIKE', '%' . $request . '%')
-            ->orWhere('status', 'LIKE', '%' . $request . '%')
-            ->paginate(20);
-
-        return $filter;
     }
   
   }
