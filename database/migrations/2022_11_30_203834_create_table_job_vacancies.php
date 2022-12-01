@@ -10,14 +10,14 @@ class CreateTableJobVacancies extends Migration
 
     public function up()
     {
-        Schema::create('table_job_vacancies', function (Blueprint $table) {
+        Schema::create('job_vacancies', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->boolean('status');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
         
-        DB::table('table_job_vacancies')->insert([
+        DB::table('job_vacancies')->insert([
             [
                 'type' => 'CLT',
             ],
@@ -25,13 +25,13 @@ class CreateTableJobVacancies extends Migration
                 'type' => 'Freelancer',
             ],
             [
-                'type' => 'Pessoa Jurídica',
+                'type' => 'Pessoa Juridica',
             ],
         ]);
     }
 
     public function down()
     {
-        Schema::dropIfExists('table_job_vacancies');
+        Schema::dropIfExists('job_vacancies');
     }
 }

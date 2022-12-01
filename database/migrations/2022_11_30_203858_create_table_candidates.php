@@ -8,7 +8,7 @@ class CreateTableCandidates extends Migration
 {
     public function up()
     {
-        Schema::create('table_candidates', function (Blueprint $table) {
+        Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -17,6 +17,6 @@ class CreateTableCandidates extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('table_candidates');
+        Schema::dropIfExists('candidates');
     }
 }

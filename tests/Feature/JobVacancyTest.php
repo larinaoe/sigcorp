@@ -8,58 +8,64 @@ use Tests\TestCase;
 class JobVacancyTest extends TestCase
 {
 
-    public function updateJobVacancyTest()
+    public function testUpdateJobVacancy()
     {
         $jobVacancy = JobVacancy::factory()->create([
+            'id' => '11',
             'type' => 'CLT',
-            'status' => true
+            'status' => 0,
         ]);
 
         $jobVacancy->update([
-            'type' => 'Pessoa Jurídica',
-            'status' => false,
+            'id' => '11',
+            'type' => 'Pessoa Juridica',
+            'status' => 1,
+        ]);
+
+        $this->assertDatabaseHas('job_vacancies', [
+            'id' => '11',
+            'type' => 'Pessoa Juridica',
+            'status' => 1,
         ]);
     }
 
-    public function deleteJobVacancyTest()
+    public function testDeleteJobVacancy()
     {
         $jobVacancy = JobVacancy::factory()->create([
+            'id' => '99',
             'type' => 'CLT',
-            'status' => false
+            'status' => 1,
+            'created_at' => null,
+            'updated_at' => null,
         ]);
         
-        $jobVacancy->destroy($jobVacancy);
+        $jobVacancy->destroy(99);
         
         $this->assertDatabaseMissing('job_vacancies', [
+            'id' => '99',
             'type' => 'CLT',
-            'status' => false
+            'status' => 1,
+            'created_at' => null,
+            'updated_at' => null,
         ]);
     }
 
-    public function ongoingJobVacancyTest()
+    public function testOngoingJobVacancy()
     {
-        $jobVacancy = new JobVacancy([
-            [
-                'type' => "CLT",
-                'status' => true,
-            ]
+        $jobVacancy = JobVacancy::factory()->create([
+            'type' => 'Freelancer',
+            'status' => true
         ]);
-
-        $jobVacancy->ongoingJobVacancy();
 
         $this->assertTrue($jobVacancy->status);
     }
 
-    public function pausedJobVacancyTest()
+    public function testPausedJobVacancyTest()
     {
-        $jobVacancy = new JobVacancy([
-            [
-                'type' => "Freelancer",
-                'status' => false,
-            ]
+        $jobVacancy = JobVacancy::factory()->create([
+            'type' => 'Pessoa Juridica',
+            'status' => false
         ]);
-        
-        $jobVacancy->pausedJobVacancy();
 
         $this->assertFalse($jobVacancy->status);
     }
