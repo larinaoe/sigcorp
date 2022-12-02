@@ -23,3 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('/candidates', CandidateController::class);
 
 Route::apiResource('/job-vacancies', JobVacancyController::class);
+
+Route::get('/job-vacancies/ongoing', JobVacancyController::class, 'ongoingJobVacancy');
+
+Route::get('/job-vacancies/paused', JobVacancyController::class, 'pausedJobVacancy');
