@@ -11,11 +11,19 @@ class JobVacancyController extends Controller
 
     public function index(JobVacancyRequest $request): Collection
     {
-        $filteredVacancies = JobVacancy::where('type', 'LIKE', '%' . $request . '%')
-            ->orWhere('status', 'LIKE', '%' . $request . '%')
-            ->paginate(20);
+        $jobVacancy = JobVacancy::orderBy('created_at', 'desc');
 
-        return $filteredVacancies;
+        $searchString = $request->get('query');
+
+        return ! empty($searchString)
+            ? $jobVacancy->where(
+                fn ($jobVacancy) => $jobVacancy->where(
+                    'type',
+                    'like',
+                    '%' . $searchString . '%'
+                )->orWhere('status', 'like', '%' . $searchString . '%')
+            )->paginate(20)
+            : $jobVacancy->paginate(20);
     }
 
     public function store(JobVacancyRequest $request)
@@ -40,14 +48,11 @@ class JobVacancyController extends Controller
 
     public function ongoingJobVacancy(JobVacancy $jobVacancy)
     {
-        $jobVacancy->status = true;
-        $jobVacancy->save();
+        $jobVacancy->update(['status' => true]);
     }
 
     public function pausedJobVacancy(JobVacancy $jobVacancy)
     {
-        $jobVacancy->status = false;
-        $jobVacancy->save();
+        $jobVacancy->update(['status' => false]);
     }
-  
   }

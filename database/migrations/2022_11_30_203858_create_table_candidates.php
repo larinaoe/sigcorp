@@ -10,6 +10,7 @@ class CreateTableCandidates extends Migration
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('job_vacancies_id');
             $table->string('name');
             $table->timestamps();
         });

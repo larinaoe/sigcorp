@@ -32,5 +32,5 @@ class CandidateController extends Controller
     {
         $candidate->delete();
     }
-  
+    
   }

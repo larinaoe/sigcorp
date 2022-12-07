@@ -7,54 +7,61 @@ use Tests\TestCase;
 
 class JobVacancyTest extends TestCase
 {
+    public function jobVacancies()
+    {
+        return [
+            [
+                [
+                    'type' => 'Freelancer',
+                    'status' => 1,
+                ],
+                [
+                    'type' => 'CLT',
+                    'status' => 0,
+                ]
+            ]
+        ];
+    }
+
+    public function invalidJobVacancies()
+    {
+        return [
+            [
+                [
+                    'type' => " ",
+                    'status' => " ",
+                ]
+            ]
+        ];
+    }
 
     public function testUpdateJobVacancy()
     {
-        $jobVacancy = JobVacancy::factory()->create([
-            'id' => '11',
-            'type' => 'CLT',
-            'status' => 0,
-        ]);
-
-        $jobVacancy->update([
-            'id' => '11',
-            'type' => 'Pessoa Juridica',
-            'status' => 1,
-        ]);
-
-        $this->assertDatabaseHas('job_vacancies', [
-            'id' => '11',
-            'type' => 'Pessoa Juridica',
-            'status' => 1,
-        ]);
+        $jobVacancy = JobVacancy::factory()->create();
+        
+        $this->put(
+            "/api/job-vacancies/$jobVacancy->id",
+            [
+                'type' => 'Freelancer',
+                'status' => 1,
+            ]
+        )->assertSuccessful();
     }
 
     public function testDeleteJobVacancy()
     {
-        $jobVacancy = JobVacancy::factory()->create([
-            'id' => '99',
-            'type' => 'CLT',
-            'status' => 1,
-            'created_at' => null,
-            'updated_at' => null,
-        ]);
-        
-        $jobVacancy->destroy(99);
-        
-        $this->assertDatabaseMissing('job_vacancies', [
-            'id' => '99',
-            'type' => 'CLT',
-            'status' => 1,
-            'created_at' => null,
-            'updated_at' => null,
-        ]);
+        $jobVacancy = JobVacancy::factory()->create();
+        $this->delete(
+            "/api/job-vacancies/$jobVacancy->id"
+        )->assertSuccessful();
     }
 
     public function testOngoingJobVacancy()
     {
-        $jobVacancy = JobVacancy::factory()->create([
-            'type' => 'Freelancer',
-            'status' => true
+        $jobVacancy = JobVacancy::factory()->create();
+
+        $this->post('/api/job-vacancies/' . $jobVacancy->status . '/ongoingJobVacancy', [
+            'status' => true,
         ]);
 
         $this->assertTrue($jobVacancy->status);
@@ -62,9 +69,10 @@ class JobVacancyTest extends TestCase
 
     public function testPausedJobVacancyTest()
     {
-        $jobVacancy = JobVacancy::factory()->create([
-            'type' => 'Pessoa Juridica',
-            'status' => false
+        $jobVacancy = JobVacancy::factory()->create();
+
+        $this->post('/api/job-vacancies/' . $jobVacancy->status . '/pausedJobVacancy', [
+            'status' => false,
         ]);
 
         $this->assertFalse($jobVacancy->status);

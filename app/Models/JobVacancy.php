@@ -14,4 +14,8 @@ class JobVacancy extends Model
         'status',
     ];
 
+    public function candidates() {
+        return $this->belongsTo(Candidate::class);
+    }
+
 }

@@ -24,6 +24,6 @@ Route::apiResource('/candidates', CandidateController::class);
 
 Route::apiResource('/job-vacancies', JobVacancyController::class);
 
-Route::get('/job-vacancies/ongoing', JobVacancyController::class, 'ongoingJobVacancy');
+Route::post('/job-vacancies/ongoing/{status}/', JobVacancyController::class, 'ongoingJobVacancy');
 
-Route::get('/job-vacancies/paused', JobVacancyController::class, 'pausedJobVacancy');
+Route::post('/job-vacancies/paused/{status}/', JobVacancyController::class, 'pausedJobVacancy');
